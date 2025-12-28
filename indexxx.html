@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="ru" class="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Земля • Ресторан + Теннис + Спорт</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #00ff41;
+      --dark: #000;
+      --bg-dark: #0a0a0a;
+      --text: #00ff41;
+      --text-light: #aaff90;
+      --section-gap: 100px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body, html {
+      overflow-x: hidden;
+      font-family: 'Montserrat', sans-serif;
+      background: var(--dark);
+      color: var(--text);
+      height: 100%;
+      position: relative;
+      line-height: 1.6;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -1;
+      pointer-events: none;
+      opacity: 0.1;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 30px 0;
+      border-bottom: 1px solid var(--primary);
+      margin-bottom: 60px;
+    }
+
+    .logo {
+      font-size: 2.5rem;
+      font-weight: 700;
+      text-shadow: 0 0 10px var(--primary);
+    }
+
+    .lang-switch {
+      display: flex;
+      gap: 10px;
+    }
+
+    .lang-btn {
+      background: transparent;
+      border: 1px solid var(--primary);
+      color: var(--text);
+      padding: 8px 15px;
+      cursor: pointer;
+      font-family: 'Roboto Mono', monospace;
+      border-radius: 4px;
+      transition: all 0.3s;
+    }
+
+    .lang-btn.active {
+      background: var(--primary);
+      color: var(--dark);
+    }
+
+    .hero {
+      text-align: center;
+      margin-bottom: var(--section-gap);
+    }
+
+    .hero h1 {
+      font-size: 3.8rem;
+      margin-bottom: 15px;
+      text-shadow: 0 0 15px var(--primary);
+    }
+
+    .hero p {
+      font-size: 1.3rem;
+      opacity: 0.8;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    section {
+      margin: var(--section-gap) 0;
+      background: var(--bg-dark);
+      padding: 60px 40px;
+      border: 1px solid var(--primary);
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0, 255, 65, 0.1);
+    }
+
+    h2 {
+      font-size: 2.5rem;
+      margin-bottom: 40px;
+      text-align: center;
+      text-shadow: 0 0 8px var(--primary);
+      position: relative;
+    }
+
+    h2::after {
+      content: '';
+      display: block;
+      width: 100px;
+      height: 3px;
+      background: var(--primary);
+      margin: 15px auto;
+    }
+
+    .services-grid, .menu-grid, .gallery {
+      display: grid;
+      gap: 30px;
+      margin-top: 30px;
+    }
+
+    .services-grid {
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
+
+    .menu-grid {
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+    }
+
+    .gallery {
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 18px;
+    }
+
+    .gallery img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      border: 1px solid var(--primary);
+      border-radius: 10px;
+      transition: all 0.3s;
+    }
+
+    .gallery img:hover {
+      transform: scale(1.04);
+      box-shadow: 0 0 15px var(--primary);
+    }
+
+    .service, .dish {
+      padding: 30px;
+      background: rgba(0, 255, 65, 0.05);
+      border: 1px solid var(--primary);
+      border-radius: 12px;
+      transition: transform 0.3s;
+      text-align: center;
+    }
+
+    .service:hover, .dish:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 0 25px rgba(0, 255, 65, 0.2);
+    }
+
+    .service-icon {
+      font-size: 3rem;
+      margin-bottom: 20px;
+    }
+
+    .service h3, .dish-name {
+      font-size: 1.5rem;
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+
+    .dish-desc {
+      font-size: 0.95rem;
+      opacity: 0.8;
+      margin: 8px 0;
+    }
+
+    .dish-price {
+      font-weight: 700;
+      color: var(--primary);
+      font-size: 1.1rem;
+    }
+
+    .bonus {
+      text-align: center;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .bonus p {
+      margin: 20px 0;
+      font-size: 1.1rem;
+    }
+
+    .qr-code {
+      margin: 25px auto;
+    }
+
+    .qr-code img {
+      width: 220px;
+      border: 2px solid var(--primary);
+      border-radius: 12px;
+    }
+
+    .bot-button {
+      display: block;
+      background: var(--primary);
+      color: var(--dark) !important;
+      text-decoration: none;
+      font-weight: 700;
+      padding: 18px 35px;
+      border-radius: 8px;
+      margin: 30px auto;
+      width: fit-content;
+      box-shadow: 0 0 25px rgba(0, 255, 65, 0.5);
+      transition: all 0.3s;
+    }
+
+    .bot-button:hover {
+      transform: scale(1.08);
+      box-shadow: 0 0 35px rgba(0, 255, 65, 0.7);
+    }
+
+    .contacts {
+      text-align: center;
+      line-height: 2.2;
+      font-size: 1.1rem;
+    }
+
+    .contacts p {
+      margin: 10px 0;
+    }
+
+    .contacts a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    .contacts a:hover {
+      text-decoration: underline;
+    }
+
+    .map-button {
+      display: inline-block;
+      background: transparent;
+      border: 1px solid var(--primary);
+      color: var(--text);
+      padding: 12px 25px;
+      margin-top: 20px;
+      text-decoration: none;
+      border-radius: 6px;
+      transition: all 0.3s;
+    }
+
+    .map-button:hover {
+      background: var(--primary);
+      color: var(--dark);
+    }
+
+    footer {
+      text-align: center;
+      padding: 60px 20px 30px;
+      font-size: 0.95rem;
+      opacity: 0.7;
+      margin-top: var(--section-gap);
+      border-top: 1px dashed var(--primary);
+      color: var(--text-light);
+    }
+
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2.8rem;
+      }
+      .hero p {
+        font-size: 1.1rem;
+      }
+      section {
+        padding: 40px 20px;
+      }
+      h2 {
+        font-size: 2.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="matrix"></canvas>
+
+<div class="container">
+  <header>
+    <div class="logo">Земля</div>
+    <div class="lang-switch">
+      <button class="lang-btn active" onclick="setLang('ru')">RU</button>
+      <button class="lang-btn" onclick="setLang('en')">EN</button>
+    </div>
+  </header>
+
+  <section class="hero">
+    <h1 class="t-1">Пространство для жизни</h1>
+    <p class="t-2">Ресторан авторской кухни, теннисные корты, тренажёрный зал и скоро — банный комплекс. Всё в одном месте: ул. Советской Армии, 295Б, Самара.</p>
+  </section>
+
+  <section id="services">
+    <h2 class="t-3">Наши услуги</h2>
+    <div class="services-grid">
+      <div class="service">
+        <div class="service-icon">🍽</div>
+        <h3 class="t-4">Ресторан</h3>
+        <p class="t-5">Авторская кухня, сезонное меню, живая музыка и уютная атмосфера. Идеально для встреч и отдыха.</p>
+        <a href="#menu">Смотреть меню</a>
+      </div>
+
+      <div class="service">
+        <div class="service-icon">🎾</div>
+        <h3 class="t-6">Теннис</h3>
+        <p class="t-7">Три корта с травяным покрытием. Проводим турниры, индивидуальные и групповые тренировки.</p>
+        <a href="tel:+79626048888">Забронировать корт</a>
+      </div>
+
+      <div class="service">
+        <div class="service-icon">🏋️</div>
+        <h3 class="t-8">Тренажёрный зал</h3>
+        <p class="t-9">Силовая и кардио зоны, боксёрский мешок. Доступен бесплатно для всех посетителей клуба.</p>
+        <a href="tel:+79626048888">Уточнить режим</a>
+      </div>
+
+      <div class="service">
+        <div class="service-icon">🚿</div>
+        <h3 class="t-10">Душевые</h3>
+        <p class="t-11">Современные душевые комнаты для комфортного посещения после тренировки или игры.</p>
+      </div>
+
+      <div class="service">
+        <div class="service-icon">🏗️</div>
+        <h3 class="t-12">Банный комплекс</h3>
+        <p class="t-13">Строительство в процессе. Скоро открытие — отдых на высшем уровне.</p>
+        <p style="color:var(--primary); font-weight:600;" class="t-14">Скоро открытие!</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="menu">
+    <h2 class="t-15">🍽 Меню ресторана</h2>
+    <div class="menu-grid" id="menu-items"></div>
+  </section>
+
+  <section id="gallery">
+    <h2 class="t-16">📸 Наша территория</h2>
+    <div class="gallery">
+      <img src="https://images.unsplash.com/photo-1587998725474-c22059565d22?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Теннисный корт">
+      <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Интерьер">
+      <img src="https://images.unsplash.com/photo-1546549502-6c2604818102?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Тренажёрный зал">
+      <img src="https://images.unsplash.com/photo-1550583724-b2692b85b150?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Вино в ресторане">
+    </div>
+  </section>
+
+  <section id="bonus" class="bonus">
+    <h2 class="t-17">💬 Бот Telegram</h2>
+    <p class="t-18">Забронировать корт, заказать стол или получить бонусы — всё в одном месте.</p>
+    <div class="qr-code">
+      <img src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=https://t.me/zemlyarestoransamara_bot" alt="QR-код бота">
+    </div>
+    <a href="https://t.me/zemlyarestoransamara_bot" class="bot-button" target="_blank">💬 Открыть бота</a>
+  </section>
+
+  <section id="contacts" class="contacts">
+    <h2 class="t-19">📍 Как нас найти</h2>
+    <p class="t-20">📌 <strong>Адрес:</strong> Самара, ул. Советской Армии, 295Б,<br>напротив Дачи К.П. Головкина</p>
+    <p class="t-21">📞 <strong>Телефон:</strong> Пожалуйста, свяжитесь с администратором по этому номеру:<br><strong>+7 962 604-88-88</strong></p>
+    <p class="t-22">💬 <strong>Telegram:</strong> <a href="https://t.me/zemlcom" target="_blank">@zemlcom</a></p>
+    <p class="t-23">🕒 <strong>Часы работы:</strong> Пн–Вс: 10:00 – 23:00</p>
+    <a href="https://yandex.ru/maps/?text=Самара, ул. Советской Армии, 295Б" target="_blank" class="map-button">Открыть в навигаторе</a>
+  </section>
+
+  <footer>
+    &copy; 2025 «Земля» • <span class="t-24">Пространство для жизни</span><br>
+    <span class="t-25">Создано с заботой и цифровым стилем.</span>
+  </footer>
+</div>
+
+<script>
+  // === Полное меню ===
+  const MENU = {
+    "Холодные закуски": [
+      {name: "Рулетики из баклажанов", price: 520, desc: "5 шт."},
+      {name: "Рулетики из ветчины с сыром", price: 570, desc: "5 шт."},
+      {name: "Рулетики из кабачка с курицей", price: 560, desc: "5 шт."},
+      {name: "Брускетта с форелью", price: 289, desc: "1 шт."},
+      {name: "Брускетта с ростбифом", price: 330, desc: "1 шт."},
+      {name: "Брускетта с креветкой", price: 350, desc: "1 шт."},
+      {name: "Тарталетки с красной икрой", price: 1450, desc: "5 шт."},
+      {name: "Рулетики из форели с пармезаном", price: 810, desc: "5 шт."},
+      {name: "Рулетики из печеного перца", price: 560, desc: "5 шт."},
+      {name: "Ассорти тарталеток", price: 1300, desc: "С ростбифом 3 шт, с форелью 3 шт, с креветкой 3 шт — 9 шт."},
+      {name: "Капрезе", price: 500, desc: "150 г"},
+      {name: "Утиная ножка с пьяной грушей", price: 1130, desc: "280 г"},
+      {name: "Медальоны из говяжьей вырезки", price: 1570, desc: "270 г"},
+      {name: "Медальоны из свиной вырезки", price: 700, desc: "200 г"},
+      {name: "Ассорти морепродуктов", price: 7000, desc: "830 г"},
+      {name: "Запеченная буженина", price: 3700, desc: "1,7 кг (с молодым картофелем, овощами)"},
+      {name: "Судак фаршированный", price: 7300, desc: "2 кг"},
+      {name: "Ассорти шашлыков", price: 6780, desc: "2 400 г (курица, свинина, баранина, говядина)"},
+      {name: "Томленая баранья нога", price: 10000, desc: "3 кг"},
+    ],
+    "Горячие блюда": [
+      {name: "Пельмени с говядиной", price: 330, desc: "270 г"},
+      {name: "Манты с говядиной", price: 125, desc: "1 шт."},
+      {name: "Рулька с квашеной капустой", price: 1250, desc: "600 г"},
+      {name: "Бефстроганов", price: 620, desc: "С картофельным пюре"},
+      {name: "Стейк из куриной грудки", price: 590},
+      {name: "Стейк из судака", price: 700, desc: "С креветочным соусом"},
+      {name: "Шашлык из цыпленка", price: 650, desc: "180 г + 100 г картофеля — 280 г"},
+      {name: "Шашлык из свиной шеи", price: 690, desc: "180 г + 100 г картофеля — 280 г"},
+      {name: "Запеченные баклажаны", price: 590, desc: "300 г (острый)"},
+      {name: "Бургер с говядиной", price: 550},
+    ],
+    "Фирменные настойки": [
+      {name: "Напиток классический", price: 150, desc: "50 мл"},
+      {name: "Беленькая", price: 150, desc: "50 мл"},
+      {name: "Хреновуха", price: 150, desc: "50 мл"},
+      {name: "Зубровка", price: 150, desc: "50 мл"},
+      {name: "Имбирно-ореховая", price: 150, desc: "50 мл"},
+      {name: "Клубника чили", price: 150, desc: "50 мл"},
+      {name: "Малинка", price: 150, desc: "50 мл"},
+      {name: "Вишенка", price: 150, desc: "50 мл"},
+      {name: "Клюковка", price: 150, desc: "50 мл"},
+      {name: "Смородинка", price: 150, desc: "50 мл"},
+    ],
+    "Безалкогольные напитки": [
+      {name: "Вода Bon Aqua", price: 100, desc: "330 мл (с/без газа)"},
+      {name: "Вода Borjomi", price: 285, desc: "500 мл"},
+      {name: "Морс", price: 140, desc: "200 мл"},
+      {name: "Морс большой", price: 500, desc: "700 мл"},
+      {name: "Сок Rich", price: 200, desc: "200 мл (апельсин, яблоко, вишня)"},
+      {name: "Coca Cola", price: 170, desc: "300 мл"},
+      {name: "Sprite", price: 170, desc: "300 мл"},
+      {name: "Fanta", price: 170, desc: "300 мл"},
+    ],
+    "Вино": [
+      {name: "Chianti (красное)", price: 320, desc: "125 мл"},
+      {name: "Chianti бутылка", price: 2100, desc: "750 мл"},
+      {name: "Pinot Grigio", price: 320, desc: "125 мл (белое сухое)"},
+      {name: "Pinot Grigio бутылка", price: 1900, desc: "750 мл"},
+      {name: "Riesling", price: 400, desc: "125 мл (белое сухое)"},
+      {name: "Riesling бутылка", price: 2400, desc: "750 мл"},
+      {name: "Prosecco", price: 2400, desc: "750 мл"},
+    ],
+    "Салаты": [
+      {name: "Оливье с цыплёнком", price: 360},
+      {name: "Оливье с баклажанами", price: 460, desc: "С хрустящими баклажанами и творожным сыром"},
+      {name: "Цезарь с цыплёнком", price: 480},
+      {name: "Цезарь с креветками", price: 580},
+      {name: "Греческий салат", price: 440, desc: "С оливковым маслом"},
+      {name: "Салат из квашеной капусты", price: 150, desc: "150 г"},
+      {name: "Салат ростбиф", price: 500, desc: "260 г (говядина, руккола, овощи)"},
+    ],
+    "Кофе": [
+      {name: "Эспрессо", price: 120, desc: "30 мл"},
+      {name: "Американо", price: 170, desc: "150 мл"},
+      {name: "Капучино обычное", price: 220, desc: "200 мл"},
+      {name: "Капучино альтернативное", price: 250, desc: "200 мл (миндальное/кокосовое молоко)"},
+      {name: "Латте обычное", price: 250, desc: "220 мл"},
+      {name: "Латте альтернативное", price: 280, desc: "220 мл"},
+    ],
+    "Лимонады": [
+      {name: "Лимонад Маракуйя-Кинза", price: 200, desc: "200 мл"},
+      {name: "Лимонад Маракуйя-Кинза большой", price: 750, desc: "750 мл"},
+      {name: "Лимонад Киви-Сельдерей", price: 200, desc: "200 мл"},
+      {name: "Лимонад Киви-Сельдерей большой", price: 750, desc: "750 мл"},
+      {name: "Лимонад Брусника-Щавель", price: 200, desc: "200 мл"},
+      {name: "Лимонад Брусника-Щавель большой", price: 750, desc: "750 мл"},
+    ],
+    "Чай": [
+      {name: "Ассам", price: 250, desc: "700 мл"},
+      {name: "Сенча", price: 250, desc: "700 мл"},
+      {name: "Эрл Грей", price: 250, desc: "700 мл"},
+      {name: "Жасмин", price: 250, desc: "700 мл"},
+      {name: "Молочный улун", price: 250, desc: "700 мл"},
+      {name: "Чай Фруктовый", price: 400, desc: "700 мл (авторский)"},
+      {name: "Чай Ягодный", price: 400, desc: "700 мл"},
+      {name: "Чай Цитрусовый", price: 400, desc: "700 мл"},
+    ],
+    "Гарниры": [
+      {name: "Картофель запечённый", price: 280, desc: "С розмарином"},
+      {name: "Картофель фри", price: 280},
+      {name: "Картофель пюре", price: 280},
+      {name: "Рис с овощами", price: 280},
+    ],
+    "Хлеб": [
+      {name: "Хлеб пшеничный", price: 15, desc: "25 г"},
+      {name: "Хлеб ржаной", price: 15, desc: "25 г"},
+    ],
+    "Десерты": [
+      {name: "Чизкейк классический", price: 350, desc: "120 г"},
+      {name: "Штрудель яблочный/вишневый", price: 350, desc: "160 г"},
+      {name: "Мороженое", price: 95, desc: "1 шт. (ваниль, шоколад, клубника)"},
+      {name: "Кекс морковный", price: 180, desc: "100 г"},
+    ],
+    "Супы": [
+      {name: "Борщ с говядиной", price: 460},
+      {name: "Грибной крем-суп", price: 350},
+      {name: "Том ям", price: 590},
+      {name: "Куриный с лапшой", price: 360},
+      {name: "Уха с форелью и судаком", price: 590},
+    ],
+    "Завтраки": [
+      {name: "Блинчики со шпинатом и форелью", price: 350, desc: "2 шт."},
+      {name: "Каша киноа", price: 170, desc: "150 г"},
+      {name: "Омлет с форелью", price: 350, desc: "300 г"},
+      {name: "Сырники творожные", price: 250},
+      {name: "Яичница из 3 яиц", price: 190, desc: "3 шт."},
+      {name: "Блинчики", price: 150, desc: "2 шт."},
+      {name: "Каша гречневая", price: 120, desc: "150 г"},
+      {name: "Каша овсяная", price: 120, desc: "200 г"},
+    ],
+  };
+
+  // === Переключение языка ===
+  const translations = {
+    ru: {
+      t1: "Пространство для жизни",
+      t2: "Ресторан авторской кухни, теннисные корты, тренажёрный зал и скоро — банный комплекс. Всё в одном месте: ул. Советской Армии, 295Б, Самара.",
+      t3: "Наши услуги",
+      t4: "Ресторан",
+      t5: "Авторская кухня, сезонное меню, живая музыка и уютная атмосфера. Идеально для встреч и отдыха.",
+      t6: "Теннис",
+      t7: "Три корта с травяным покрытием. Проводим турниры, индивидуальные и групповые тренировки.",
+      t8: "Тренажёрный зал",
+      t9: "Силовая и кардио зоны, боксёрский мешок. Доступен бесплатно для всех посетителей клуба.",
+      t10: "Душевые",
+      t11: "Современные душевые комнаты для комфортного посещения после тренировки или игры.",
+      t12: "Банный комплекс",
+      t13: "Строительство в процессе. Скоро открытие — отдых на высшем уровне.",
+      t14: "Скоро открытие!",
+      t15: "🍽 Меню ресторана",
+      t16: "📸 Наша территория",
+      t17: "💬 Бот Telegram",
+      t18: "Забронировать корт, заказать стол или получить бонусы — всё в одном месте.",
+      t19: "📍 Как нас найти",
+      t20: "📌 <strong>Адрес:</strong> Самара, ул. Советской Армии, 295Б,<br>напротив Дачи К.П. Головкина",
+      t21: "📞 <strong>Телефон:</strong> Пожалуйста, свяжитесь с администратором по этому номеру:<br><strong>+7 962 604-88-88</strong>",
+      t22: "💬 <strong>Telegram:</strong> <a href='https://t.me/zemlcom' target='_blank'>@zemlcom</a>",
+      t23: "🕒 <strong>Часы работы:</strong> Пн–Вс: 10:00 – 23:00",
+      t24: "Пространство для жизни",
+      t25: "Создано с заботой и цифровым стилем.",
+    },
+    en: {
+      t1: "A Space for Life",
+      t2: "A restaurant with author's cuisine, tennis courts, fitness room, and soon — a bath complex. All in one place: Sovetskoy Armii St., 295B, Samara.",
+      t3: "Our Services",
+      t4: "Restaurant",
+      t5: "Author's cuisine, seasonal menu, live music, and cozy atmosphere. Perfect for meetings and relaxation.",
+      t6: "Tennis",
+      t7: "Three courts with grass surface. We host tournaments, individual and group training sessions.",
+      t8: "Fitness Room",
+      t9: "Strength and cardio zones, punching bag. Free access for all club visitors.",
+      t10: "Showers",
+      t11: "Modern shower rooms for a comfortable post-workout or post-game visit.",
+      t12: "Bath Complex",
+      t13: "Under construction. Coming soon — premium relaxation.",
+      t14: "Opening Soon!",
+      t15: "🍽 Restaurant Menu",
+      t16: "📸 Our Territory",
+      t17: "💬 Telegram Bot",
+      t18: "Book a court, reserve a table, or get bonuses — all in one place.",
+      t19: "📍 How to Find Us",
+      t20: "📌 <strong>Address:</strong> Sovetskoy Armii St., 295B, Samara,<br>opposite K.P. Golovkin's Estate",
+      t21: "📞 <strong>Phone:</strong> Please contact the administrator at:<br><strong>+7 962 604-88-88</strong>",
+      t22: "💬 <strong>Telegram:</strong> <a href='https://t.me/zemlcom' target='_blank'>@zemlcom</a>",
+      t23: "🕒 <strong>Working Hours:</strong> Mon–Sun: 10:00 – 23:00",
+      t24: "A Space for Life",
+      t25: "Created with care and digital style.",
+    }
+  };
+
+  function setLang(lang) {
+    document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
+    document.documentElement.lang =
